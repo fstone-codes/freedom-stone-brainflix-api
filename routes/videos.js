@@ -40,7 +40,7 @@ router
             id: uuidv4(),
             title: title,
             channel: "Arrayuv Sunshine",
-            image: "temp-image",
+            image: "./images/image8.jpg",
             description: description,
             views: "1,254",
             duration: "3:30",

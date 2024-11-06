@@ -7,6 +7,7 @@ const { PORT, BACKEND_URL, CORS_ORIGIN } = process.env;
 
 app.use(cors({ origin: CORS_ORIGIN }));
 app.use(express.json());
+app.use(express.static("public"));
 
 import videoRoutes from "./routes/videos.js";
 
