@@ -12,7 +12,15 @@ router
     .route("/")
     .get((req, res) => {
         const videosData = readVideos();
-        res.json(videosData);
+
+        const condensedData = videosData.map((video) => ({
+            id: video.id,
+            title: video.title,
+            channel: video.channel,
+            image: video.image,
+        }));
+
+        res.json(condensedData);
     })
     .post((req, res) => {
         const { title, description } = req.body;
