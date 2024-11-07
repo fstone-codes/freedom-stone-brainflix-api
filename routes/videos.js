@@ -46,7 +46,7 @@ router
             likes: "279",
             duration: "3:30",
             video: "temp-video",
-            timestamp: new Date(),
+            timestamp: Date.now(),
             comments: [],
         };
 
@@ -66,7 +66,7 @@ router.get("/:videoId", (req, res) => {
     const currentVideo = videosData.find((video) => video.id === videoId);
 
     if (!currentVideo) {
-        res.status(404).set(`Error: video ${videoId} not found`);
+        res.status(404).set(`Error: video "${videoId}" not found`);
         return;
     }
 
@@ -86,7 +86,7 @@ router.post("/:videoId/comments", (req, res) => {
     const currentVideo = videosData.find((video) => video.id === videoId);
 
     if (!currentVideo) {
-        res.status(404).set(`Error: video ${videoId} not found`);
+        res.status(404).set(`Error: video "${videoId}" not found`);
         return;
     }
 
@@ -94,13 +94,38 @@ router.post("/:videoId/comments", (req, res) => {
         name: name,
         comment: comment,
         id: uuidv4(),
-        timestamp: new Date(),
+        timestamp: Date.now(),
     };
 
     currentVideo.comments.push(newComment);
     fs.writeFileSync("./data/videos.json", JSON.stringify(videosData));
 
     res.status(201).json(newComment);
+});
+
+router.delete("/:videoId/comments/:commentId", (req, res) => {
+    const { videoId, commentId } = req.params;
+
+    const videosData = readVideos();
+
+    const currentVideo = videosData.find((video) => video.id === videoId);
+
+    if (!currentVideo) {
+        res.status(404).send(`Error: video "${videoId}" not found`);
+        return;
+    }
+
+    const deleteComment = currentVideo.comments.find((comment) => comment.id === commentId);
+
+    if (!deleteComment) {
+        res.status(404).send(`Error: comment "${commentId}" not found`);
+        return;
+    }
+
+    currentVideo.comments = currentVideo.comments.filter((comment) => comment.id !== commentId);
+    fs.writeFileSync("./data/videos.json", JSON.stringify(videosData));
+
+    res.status(204).json(deleteComment);
 });
 
 export default router;
