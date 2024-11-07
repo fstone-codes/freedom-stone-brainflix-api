@@ -40,9 +40,10 @@ router
             id: uuidv4(),
             title: title,
             channel: "Arrayuv Sunshine",
-            image: "./images/image8.jpg",
+            image: "./images/Upload-video-preview.jpg",
             description: description,
             views: "1,254",
+            likes: "279",
             duration: "3:30",
             video: "temp-video",
             timestamp: new Date(),
@@ -70,6 +71,36 @@ router.get("/:videoId", (req, res) => {
     }
 
     res.json(currentVideo);
+});
+
+router.post("/:videoId/comments", (req, res) => {
+    const { videoId } = req.params;
+    const { name, comment } = req.body;
+
+    if (!comment.trim()) {
+        return res.status(400).send("Error: must provide comment");
+    }
+
+    const videosData = readVideos();
+
+    const currentVideo = videosData.find((video) => video.id === videoId);
+
+    if (!currentVideo) {
+        res.status(404).set(`Error: video ${videoId} not found`);
+        return;
+    }
+
+    const newComment = {
+        name: name,
+        comment: comment,
+        id: uuidv4(),
+        timestamp: new Date(),
+    };
+
+    currentVideo.comments.push(newComment);
+    fs.writeFileSync("./data/videos.json", JSON.stringify(videosData));
+
+    res.status(201).json(newComment);
 });
 
 export default router;
