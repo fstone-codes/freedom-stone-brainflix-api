@@ -94,6 +94,7 @@ router.post("/:videoId/comments", (req, res) => {
         name: name,
         comment: comment,
         id: uuidv4(),
+        likes: 0,
         timestamp: Date.now(),
     };
 
