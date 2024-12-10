@@ -14,6 +14,9 @@ import videoRoutes from "./routes/videos.js";
 app.use("/videos", videoRoutes);
 
 app.listen(PORT, () => {
-    console.log(`Listening on port ${BACKEND_URL}:${PORT}`);
-    console.log("Press CTRL + C to stop server");
+    if (BACKEND_URL) {
+        console.log(`Listening on port ${BACKEND_URL}:${PORT}`);
+    } else {
+        console.log(`Listening on port ${PORT}`);
+    }
 });

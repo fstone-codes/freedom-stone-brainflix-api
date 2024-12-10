@@ -20,6 +20,7 @@
     "author": "",
     "contributors": [],
     "scripts": {
+        "start": "node index.js",
         "dev": "node --watch index.js"
     },
     "dependencies": {
